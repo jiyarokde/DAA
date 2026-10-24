@@ -1,0 +1,63 @@
+#include <stdio.h>
+
+int arr[100];
+int subset[100];
+int result[100][100];
+int size[100];
+int count = 0;
+
+void findSubsets(int index, int n, int target, int len)
+{
+    if (target == 0)
+    {
+        int i;
+        size[count] = len;
+        for (i = 0; i < len; i++)
+            result[count][i] = subset[i];
+        count++;
+        return;
+    }
+
+    if (index >= n || target < 0)
+        return;
+
+    /* Include current element */
+    subset[len] = arr[index];
+    findSubsets(index + 1, n, target - arr[index], len + 1);
+
+    /* Exclude current element */
+    findSubsets(index + 1, n, target, len);
+}
+
+int main()
+{
+    int n, target;
+    int i, j;
+
+    scanf("%d", &n);
+
+    for (i = 0; i < n; i++)
+        scanf("%d", &arr[i]);
+
+    scanf("%d", &target);
+
+    findSubsets(0, n, target, 0);
+
+    if (count == 0)
+    {
+        printf("-1");
+    }
+    else
+    {
+        for (i = count - 1; i >= 0; i--)
+        {
+            for (j = 0; j < size[i]; j++)
+            {
+                printf("%d ", result[i][j]);
+            }
+            printf("\n");
+        }
+    }
+
+    return 0;
+}
